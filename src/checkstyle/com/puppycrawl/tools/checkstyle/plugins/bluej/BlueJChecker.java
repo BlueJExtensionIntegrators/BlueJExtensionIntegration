@@ -20,7 +20,6 @@
 package com.puppycrawl.tools.checkstyle.plugins.bluej;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,13 +39,11 @@ import com.puppycrawl.tools.checkstyle.api.Configuration;
  * @author Rick Giles
  * @version $Id: BlueJChecker.java,v 1.9 2011/10/25 05:27:10 stedwar2 Exp $
  */
-public class BlueJChecker
-{
+public class BlueJChecker {
     /**
      * Constructs a <code>BlueJChecker</code>.
      */
-    public BlueJChecker()
-    {
+    public BlueJChecker() {
         // Nothing to do
     }
 
@@ -55,14 +52,11 @@ public class BlueJChecker
      * @return an Auditor with the audit results.
      * @throws CheckstyleException if there is an error.
      */
-    public Auditor processAllFiles()
-        throws CheckstyleException
-    {
+    public Auditor processAllFiles() throws CheckstyleException {
         Set<File> files;
         try {
             files = BlueJManager.getInstance().getFiles();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new CheckstyleException(e.getMessage());
         }
         return process(files);
@@ -74,24 +68,20 @@ public class BlueJChecker
      * @return an Auditor with the audit results.
      * @throws CheckstyleException if there is an error.
      */
-    public Auditor process(Set<File> files)
-        throws CheckstyleException
-    {
+    public Auditor process(final Set<File> files) throws CheckstyleException {
         final Properties props =
             new Properties(BlueJManager.getInstance().properties());
         try {
             InputStream propStream =
                 BlueJManager.getInstance().getPropertyStream();
-            if (propStream != null)
-            {
+            if (propStream != null) {
                 props.load(propStream);
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new CheckstyleException(ex.getMessage());
         }
 
-        // create and configure a Checker
+        // create and configure a Checker.
         final Checker c = new Checker();
         c.setModuleClassLoader(BlueJChecker.class.getClassLoader());
         final Configuration config =
@@ -104,7 +94,7 @@ public class BlueJChecker
         final AuditListener auditor = new Auditor();
         c.addListener(auditor);
 
-        // lock TreeWalker for call to static method parse
+        // lock TreeWalker for call to static method parse.
         synchronized (TreeWalker.class) {
             c.process(new ArrayList<File>(files));
         }

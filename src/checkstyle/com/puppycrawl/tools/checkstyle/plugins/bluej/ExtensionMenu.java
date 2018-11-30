@@ -28,14 +28,14 @@ import bluej.extensions.BPackage;
 import bluej.extensions.MenuGenerator;
 
 /**
- * Manages the Checkstyle extension menu item
+ * Manages the Checkstyle extension menu item.
  * @author Rick Giles
- * @version $Id: ExtensionMenu.java,v 1.5 2007/08/19 03:13:53 stedwar2 Exp $
+ * @version $Id: ExtensionMenu.java,v1.5 2007/08/19 03:13:53 stedwar2 Exp$
  */
-public class ExtensionMenu extends MenuGenerator
-{
+public class ExtensionMenu extends MenuGenerator {
     /**
-     * @see bluej.extensions.MenuGenerator#getToolsMenuItem(bluej.extensions.BPackage)
+     * @see bluej.extensions.
+     *      MenuGenerator#getToolsMenuItem(bluej.extensions.BPackage) .
      */
     public JMenuItem getToolsMenuItem(BPackage aPackage) {
         final JMenuItem item = new JMenuItem("Checkstyle");
@@ -61,14 +61,12 @@ public class ExtensionMenu extends MenuGenerator
      * @author Rick Giles
      * @version 13-May-2003
      */
-    class MenuAction implements ActionListener
-    {
+    class MenuAction implements ActionListener {
         /**
          * Audits the open projects and shows the results.
          * @see java.awt.event.ActionListener
          */
-        public void actionPerformed(ActionEvent aEvent)
-        {
+        public void actionPerformed(final ActionEvent aEvent) {
             CheckstyleExtension.getInstance().showAuditFrame();
         }
     }

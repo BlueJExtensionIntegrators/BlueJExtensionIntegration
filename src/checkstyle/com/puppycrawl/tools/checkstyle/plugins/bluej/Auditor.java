@@ -28,41 +28,36 @@ import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.AuditListener;
 
 /**
- * Describe class Auditor
+ * Describe class Auditor.
  * @author Rick Giles
  * @author CS4250 Students (MSU Denver)
  * @version 1.5
  */
-public class Auditor implements AuditListener
-{
-    /** List of FileAuditors, one for each audited file */
+public class Auditor implements AuditListener {
+
+    /** List of FileAuditors, one for each audited file .*/
     private List<FileAuditor> mFileAuditors = null;
 
-
-    /** FileAuditor for currently processed file */
+    /** FileAuditor for currently processed file .*/
     private FileAuditor mCurrentFileAuditor;
 
-
     /** @see com.puppycrawl.tools.checkstyle.api.AuditListener */
-    public void auditStarted(AuditEvent aEvt)
-    {
+    public void auditStarted(final AuditEvent aEvt) {
         mFileAuditors = new ArrayList<FileAuditor>();
     }
 
     /** @see com.puppycrawl.tools.checkstyle.api.AuditListener */
-    public void auditFinished(AuditEvent aEvt)
-    {
+    public void auditFinished(final AuditEvent aEvt) {
         // nothing to do
     }
 
     /** @see com.puppycrawl.tools.checkstyle.api.AuditListener */
-    public void fileStarted(AuditEvent aEvt)
-    {
+    public void fileStarted(final AuditEvent aEvt) {
         // use one in list?
         Iterator it = mFileAuditors.iterator();
         while (it.hasNext()) {
             final FileAuditor auditor = (FileAuditor) it.next();
-            if (auditor.toString().equals(aEvt.getFileName())){
+            if (auditor.toString().equals(aEvt.getFileName())) {
                 mCurrentFileAuditor = auditor;
                 return;
             }
@@ -72,31 +67,26 @@ public class Auditor implements AuditListener
     }
 
     /** @see com.puppycrawl.tools.checkstyle.api.AuditListener */
-    public void fileFinished(AuditEvent aEvt)
-    {
+    public void fileFinished(final AuditEvent aEvt) {
         // nothing to do
     }
 
     /** @see com.puppycrawl.tools.checkstyle.api.AuditListener */
-    public void addError(AuditEvent aEvt)
-    {
+    public void addError(final AuditEvent aEvt) {
         mCurrentFileAuditor.addError(aEvt);
     }
 
     /** @see com.puppycrawl.tools.checkstyle.api.AuditListener */
-    public void addException(AuditEvent aEvt, Throwable aThrowable)
-    {
+    public void addException(final AuditEvent aEvt,
+                             final Throwable aThrowable) {
         mCurrentFileAuditor.addException(aEvt, aThrowable);
     }
-
 
     /**
      * Returns the list of file auditors for this auditor.
      * @return the list of file auditors for this auditor.
      */
-    public List<FileAuditor> getFileAuditors()
-    {
+    public List<FileAuditor> getFileAuditors() {
         return mFileAuditors;
     }
-
 }
