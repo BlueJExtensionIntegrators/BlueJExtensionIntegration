@@ -33,12 +33,8 @@ import bluej.extensions.BlueJ;
  * v 1.1 2007/08/19 03:13:03 stedwar2 Exp $.
  */
 public class BlueJPropertiesAdapter extends Properties {
-    //~ Instance variables ....................................................
     private BlueJ bluej;
 
-    //~ Constructors ..........................................................
-
-    // ----------------------------------------------------------
     /**
      * Constructs an adapter that reads properties from the given BlueJ
      * object.
@@ -50,8 +46,6 @@ public class BlueJPropertiesAdapter extends Properties {
         this(blueJ, null);
     }
 
-
-    // ----------------------------------------------------------
     /**
      * Constructs a <code>BlueJChecker</code>.
      * @param blueJ The BlueJ proxy object to use to store and retrieve
@@ -64,10 +58,6 @@ public class BlueJPropertiesAdapter extends Properties {
         bluej = blueJ;
     }
 
-
-    //~ Methods ...............................................................
-
-    // ----------------------------------------------------------
     /**
      * Look up a property value.  First, look in this object itself.
      * If the key is not found in this property list, then check this BlueJ
@@ -108,8 +98,6 @@ public class BlueJPropertiesAdapter extends Properties {
         return super.getProperty(key);
     }
 
-
-    // ----------------------------------------------------------
     /**
      * Stores the given property to BlueJ's settings for this extension,
      * if we have a live Bluej proxy to use.  Otherwise, fall back to
@@ -134,8 +122,6 @@ public class BlueJPropertiesAdapter extends Properties {
         return localOld;
     }
 
-
-    // ----------------------------------------------------------
     /**
      * Get the BlueJ proxy object used to look up property values.
      * @return the proxy
@@ -144,8 +130,6 @@ public class BlueJPropertiesAdapter extends Properties {
         return bluej;
     }
 
-
-    // ----------------------------------------------------------
     /**
      * Set the BlueJ proxy object used to look up property values.
      * @param blueJ the new proxy to use
