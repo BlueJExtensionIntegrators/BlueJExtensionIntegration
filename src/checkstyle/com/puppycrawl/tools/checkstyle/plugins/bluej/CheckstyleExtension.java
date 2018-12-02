@@ -55,68 +55,62 @@ import bluej.extensions.event.PackageListener;
  * @author CS4250 Students (MSU Denver)
  * @version 1.11
  */
-public class CheckstyleExtension extends Extension
-{
-    /** true if the log factory has been initialized */
+public class CheckstyleExtension extends Extension {
+    /** true if the log factory has been initialized. */
     private boolean mInitialized = false;
 
-    /** Factory for creating org.apache.commons.logging.Log instances */
+    /** Factory for creating org.apache.commons.logging.Log instances. */
     private LogFactory mLogFactory;
 
-    /** interval between audit checks (milliseconds) */
+    /** interval between audit checks (milliseconds). */
     private static final int AUDIT_CHECK_INTERVAL = 2000;
 
-    /** singleton */
+    /** singleton. */
     private static CheckstyleExtension sInstance;
 
     /** Periodically checks for file set changes. */
     private Timer mTimer;
 
-    /** BlueJ tools menu item for Checkstyle */
+    /** BlueJ tools menu item for Checkstyle. */
     private ExtensionMenu mMenu;
 
-    /** display audit results */
+    /** display audit results. */
     private AuditFrame mFrame = null;
 
-    /** files being compiled */
+    /** files being compiled. */
     private Set<File> mCompilingFiles = new HashSet<File>();
 
-    /** extension name */
+    /** extension name. */
     private static final String NAME = "Checkstyle";
 
-    /** extension description */
+    /** extension description. */
     private static final String DESCRIPTION =
         "Checks that Java source code adheres to a coding standard.";
 
-    /**  extension version */
+    /**  extension version. */
     private static final String VERSION = "5.4.1";
 
-    /** extension URL */
+    /** extension URL. */
     private static final String URL =
         "http://github.com/MetroCS/checkstyle4bluej/";
 
     /** @see bluej.extensions.event.PackageListener */
-    private class CheckstylePackageListener implements PackageListener
-    {
+    private class CheckstylePackageListener implements PackageListener {
         /** @see bluej.extensions.event.PackageListener */
-        public void packageOpened(PackageEvent aEvent)
-        {
+        public void packageOpened(final PackageEvent aEvent) {
             // refreshView();
         }
 
         /** @see bluej.extensions.event.PackageListener */
-        public void packageClosing(PackageEvent aEvent)
-        {
+        public void packageClosing(final PackageEvent aEvent) {
             // refreshView();
         }
     }
 
     /** @see bluej.extensions.event.CompileListener */
-    private class CheckstyleCompileListener implements CompileListener
-    {
+    private class CheckstyleCompileListener implements CompileListener {
         /** @see bluej.extensions.event.CompileListener */
-        public void compileStarted(CompileEvent aEvent)
-        {
+        public void compileStarted(final CompileEvent aEvent) {
             recordCompileStart(aEvent.getFiles());
         }
 
@@ -124,8 +118,7 @@ public class CheckstyleExtension extends Extension
          * Records the start of compilation of a set of files.
          * @param aFiles the set of files being compiled.
          */
-        private void recordCompileStart(File[] aFiles)
-        {
+        private void recordCompileStart(final File[] aFiles) {
             for (int i = 0; i < aFiles.length; i++) {
                 mCompilingFiles.add(aFiles[i]);
             }
@@ -133,8 +126,7 @@ public class CheckstyleExtension extends Extension
         }
 
         /** @see bluej.extensions.event.CompileListener */
-        public void compileError(CompileEvent aEvent)
-        {
+        public void compileError(final CompileEvent aEvent) {
             recordCompileEnd(aEvent.getFiles());
         }
 
@@ -142,8 +134,7 @@ public class CheckstyleExtension extends Extension
          * Records the end of compilation of a set of files.
          * @param aFiles the set of files ending compilation.
          */
-        private void recordCompileEnd(File[] aFiles)
-        {
+        private void recordCompileEnd(final File[] aFiles) {
             for (int i = 0; i < aFiles.length; i++) {
                 mCompilingFiles.remove(aFiles[i]);
             }
@@ -151,37 +142,32 @@ public class CheckstyleExtension extends Extension
         }
 
         /** @see bluej.extensions.event.CompileListener */
-        public void compileWarning(CompileEvent aEvent)
-        {
+        public void compileWarning(final CompileEvent aEvent) {
             recordCompileEnd(aEvent.getFiles());
         }
 
         /** @see bluej.extensions.event.CompileListener */
-        public void compileSucceeded(CompileEvent aEvent)
-        {
+        public void compileSucceeded(final CompileEvent aEvent) {
             recordCompileEnd(aEvent.getFiles());
             if (mCompilingFiles.isEmpty()) {
                 refreshView();
             }
         }
 
-        /** @see bluej.extensions.event.CompileListener */
-        public void compileFailed(CompileEvent aEvent)
-        {
+        /** @see bluej.extensions.event.CompileListener. */
+        public void compileFailed(final CompileEvent aEvent) {
             recordCompileEnd(aEvent.getFiles());
         }
     }
 
-    /** @see bluej.extensions.event.ApplicationListener */
-    private class CheckstyleApplicationListener implements ApplicationListener
-    {
+    /** @see bluej.extensions.event.ApplicationListener. */
+    private class CheckstyleApplicationListener implements ApplicationListener {
 
         /**
          * Initializes the audit window.
          * @see bluej.extensions.event.ApplicationListener
          */
-        public void blueJReady(ApplicationEvent aEvent)
-        {
+        public void blueJReady(final ApplicationEvent aEvent) {
             buildAuditFrame();
             refreshView();
         }
@@ -191,17 +177,15 @@ public class CheckstyleExtension extends Extension
      * Returns the single CheckstyleExtension instance.
      * @return  the single CheckstyleExtension instance.
      */
-    public static CheckstyleExtension getInstance()
-    {
+    public static CheckstyleExtension getInstance() {
         return sInstance;
     }
 
     /**
      * Constructs a <code>CheckstyleExtension</code>.
      */
-    public CheckstyleExtension()
-    {
-        // establish singleton extension
+    public CheckstyleExtension() {
+        // establish singleton extension.
         sInstance = this;
 
         final ActionListener listener = new FilesChangeListener();
@@ -210,8 +194,7 @@ public class CheckstyleExtension extends Extension
         try {
             mLogFactory = LogFactory.getFactory();
             mInitialized = true;
-        }
-        catch (LogConfigurationException e) {
+        } catch (LogConfigurationException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
             e.printStackTrace();
         }
@@ -220,38 +203,34 @@ public class CheckstyleExtension extends Extension
     /**
      * Starts or stops timer.
      */
-    private void updateTimer()
-    {
+    private void updateTimer() {
         if (mCompilingFiles.isEmpty() && mFrame.isShowing()) {
             mTimer.start();
-        }
-        else {
+        } else {
             mTimer.stop();
         }
     }
 
     /** @see bluej.extensions.Extension#isCompatible() */
-    public boolean isCompatible()
-    {
+    public boolean isCompatible() {
         return true;
     }
 
     /** @see bluej.extensions.Extension#startup(bluej.extensions.BlueJ) */
-    public void startup(BlueJ aBlueJ)
-    {
-        // establish singleton manager for the BlueJ application proxy
+    public void startup(final BlueJ aBlueJ) {
+        // establish singleton manager for the BlueJ application proxy.
         BlueJManager.getInstance().setBlueJ(aBlueJ);
 
-        // register listeners
+        // register listeners.
         aBlueJ.addApplicationListener(new CheckstyleApplicationListener());
         aBlueJ.addPackageListener(new CheckstylePackageListener());
         aBlueJ.addCompileListener(new CheckstyleCompileListener());
 
-        // install menu item
+        // install menu item.
         mMenu = new ExtensionMenu();
         aBlueJ.setMenuGenerator(mMenu);
 
-        // install preferences handler
+        // install preferences handler.
         Preferences myPreferences = new Preferences();
         aBlueJ.setPreferenceGenerator(myPreferences);
 
@@ -262,8 +241,7 @@ public class CheckstyleExtension extends Extension
      * Saves audit window information.
      * @see bluej.extensions.Extension#terminate()
      */
-    public void terminate()
-    {
+    public void terminate() {
         BlueJManager.getInstance().saveAuditFrame(mFrame);
         mCompilingFiles.clear();
         mTimer.stop();
@@ -272,15 +250,13 @@ public class CheckstyleExtension extends Extension
     /**
      * Refreshes the audit view. If there is an error, report it.
      */
-    public void refreshView()
-    {
+    public void refreshView() {
         if (mFrame.isShowing()) {
             final BlueJChecker checker = new BlueJChecker();
             final Auditor auditor;
             try {
                 auditor = checker.processAllFiles();
-            }
-            catch (CheckstyleException ex) {
+            } catch (CheckstyleException ex) {
                 error(ex);
                 return;
             }
@@ -289,34 +265,28 @@ public class CheckstyleExtension extends Extension
     }
 
     /**
-     * Creates and installs an audit frame
+     * Creates and installs an audit frame.
      */
-    private synchronized void buildAuditFrame()
-    {
-        /** @see java.awt.event.WindowAdapter */
-        final class AuditFrameListener extends WindowAdapter
-        {
-            /** @see java.awt.event.WindowListener */
-            public void windowOpened(WindowEvent aEvent)
-            {
+    private synchronized void buildAuditFrame() {
+        /** @see java.awt.event.WindowAdapter. */
+        final class AuditFrameListener extends WindowAdapter {
+            /** @see java.awt.event.WindowListener. */
+            public void windowOpened(final WindowEvent aEvent) {
                 updateTimer();
             }
 
-            /** @see java.awt.event.WindowListener */
-            public void windowClosed(WindowEvent aEvent)
-            {
+            /** @see java.awt.event.WindowListener. */
+            public void windowClosed(final WindowEvent aEvent) {
                 updateTimer();
             }
 
-            /** @see java.awt.event.WindowListener */
-            public void windowIconified(WindowEvent aEvent)
-            {
+            /** @see java.awt.event.WindowListener. */
+            public void windowIconified(final WindowEvent aEvent) {
                 updateTimer();
             }
 
-            /** @see java.awt.event.WindowListener */
-            public void windowDeiconified(WindowEvent aEvent)
-            {
+            /** @see java.awt.event.WindowListener. */
+            public void windowDeiconified(final WindowEvent aEvent) {
                 updateTimer();
             }
         }
@@ -332,8 +302,7 @@ public class CheckstyleExtension extends Extension
     /**
      * Shows the audit frame.
      */
-    public void showAuditFrame()
-    {
+    public void showAuditFrame() {
         buildAuditFrame();
         mFrame.setVisible(true);
         refreshView();
@@ -343,13 +312,10 @@ public class CheckstyleExtension extends Extension
      * Updates view of audit results.
      * @param aAuditor the auditor with audit results
      */
-    public synchronized void viewAudit(final Auditor aAuditor)
-    {
+    public synchronized void viewAudit(final Auditor aAuditor) {
         // execute on the application's event-dispatch thread
-        final Runnable update = new Runnable()
-        {
-            public void run()
-            {
+        final Runnable update = new Runnable() {
+            public void run() {
                 if (mFrame != null) {
                     mFrame.setAuditor(aAuditor);
                 }
@@ -358,32 +324,27 @@ public class CheckstyleExtension extends Extension
         SwingUtilities.invokeLater(update);
     }
 
-    /** @see bluej.extensions.Extension#getName() */
-    public String getName()
-    {
+    /** @see bluej.extensions.Extension#getName(). */
+    public String getName() {
         return NAME;
     }
 
-    /** @see bluej.extensions.Extension#getDescription() */
-    public String getDescription()
-    {
+    /** @see bluej.extensions.Extension#getDescription(). */
+    public String getDescription() {
         return DESCRIPTION;
     }
 
-    /** @see bluej.extensions.Extension#getVersion() */
-    public String getVersion()
-    {
+    /** @see bluej.extensions.Extension#getVersion(). */
+    public String getVersion() {
         return VERSION;
     }
 
-    /** @see bluej.extensions.Extension#getURL() */
-    public URL getURL()
-    {
+    /** @see bluej.extensions.Extension#getURL(). */
+    public URL getURL() {
         URL result = null;
         try {
             result = new URL(URL);
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             error(e);
         }
         return result;
@@ -392,15 +353,13 @@ public class CheckstyleExtension extends Extension
      * Reports an error message.
      * @param aMessage the message to report.
      */
-    public void error(String aMessage)
-    {
+    public void error(final String aMessage) {
         Frame frame = BlueJManager.getInstance().getCurrentFrame();
         JOptionPane.showMessageDialog(frame, aMessage);
         if (mInitialized) {
             final Log log = mLogFactory.getInstance(CheckstyleExtension.class);
             log.info(aMessage);
-        }
-        else {
+        } else {
             System.out.println(aMessage);
         }
     }
@@ -409,8 +368,7 @@ public class CheckstyleExtension extends Extension
      * Reports an exception.
      * @param aException the exception to report.
      */
-    public void error(Exception aException)
-    {
+    public void error(final Exception aException) {
         aException.printStackTrace();
         error("" + aException);
     }

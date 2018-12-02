@@ -28,32 +28,25 @@ import java.util.Set;
 /**
  * Listener for timer.
  * @author Rick Giles
- * @version $Id: FilesChangeListener.java,v 1.5 2007/08/19 03:13:52 stedwar2 Exp $
+ * @version $Id: FilesChangeListener.java,v1.5 2007/08/19 03:13:52 stedwar2 Exp$
  */
-public class FilesChangeListener implements ActionListener
-{
-    /** most recent set of files */
+public class FilesChangeListener implements ActionListener {
+    /** most recent set of files. */
     private Set<File> mFiles = new HashSet<File>();
 
     /** @see java.awt.event.ActionListener */
-    public void actionPerformed(ActionEvent aEvent)
-    {
-        try
-        {
+    public void actionPerformed(final ActionEvent aEvent) {
+        try {
 //          files changed?
             final Set<File> openFiles = BlueJManager.getInstance().getFiles();
-            if (!mFiles.equals(openFiles))
-            {
+            if (!mFiles.equals(openFiles)) {
                 mFiles = openFiles;
                 final BlueJChecker checker = new BlueJChecker();
                 final Auditor auditor = checker.process(openFiles);
                 CheckstyleExtension.getInstance().viewAudit(auditor);
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return;
         }
     }
-
 }

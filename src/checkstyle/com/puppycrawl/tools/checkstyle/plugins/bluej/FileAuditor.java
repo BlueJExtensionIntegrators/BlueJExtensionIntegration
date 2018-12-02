@@ -30,21 +30,20 @@ import com.puppycrawl.tools.checkstyle.api.AuditEvent;
  * @author Rick Giles
  * @version $Id: FileAuditor.java,v 1.4 2007/08/19 03:13:52 stedwar2 Exp $
  */
-public class FileAuditor implements Comparable
-{
-    /** event that spawned this file auditor */
+public class FileAuditor implements Comparable {
+
+    /** event that spawned this file auditor. */
     private final AuditEvent mAuditEvent;
 
 
-    /** events for the file of this file auditor */
+    /** events for the file of this file auditor. */
     private final List<AuditEvent> mEvents = new ArrayList<AuditEvent>();
 
     /**
      * Constructs a <code>FileAuditor</code> for a given file.
      * @param aEvt audit event for the file.
      */
-    public FileAuditor(AuditEvent aEvt)
-    {
+    public FileAuditor(final AuditEvent aEvt) {
         mAuditEvent = aEvt;
     }
 
@@ -52,8 +51,7 @@ public class FileAuditor implements Comparable
      * Notify that an audit error was discovered on a specific file.
      * @param aEvt the event details.
      */
-    public void addError(AuditEvent aEvt)
-    {
+    public void addError(final AuditEvent aEvt) {
         mEvents.add(aEvt);
     }
 
@@ -62,10 +60,8 @@ public class FileAuditor implements Comparable
      * @param aEvt the event details.
      * @param aThrowable details of the exception.
      */
-    public void addException(
-        AuditEvent aEvt,
-        @SuppressWarnings("unused") Throwable aThrowable)
-    {
+    public void addException(final AuditEvent aEvt,
+        @SuppressWarnings("unused") Throwable aThrowable) {
         mEvents.add(aEvt);
     }
 
@@ -73,8 +69,7 @@ public class FileAuditor implements Comparable
      * Return the audit events for this file auditor.
      * @return the audit events for this file auditor.
      */
-    public List<AuditEvent> getEvents()
-    {
+    public List<AuditEvent> getEvents() {
         return mEvents;
     }
 
@@ -84,8 +79,7 @@ public class FileAuditor implements Comparable
      * auditor.
      * @return a string representation of this file auditor.
      */
-    public String toString()
-    {
+    public String toString() {
         return mAuditEvent.getFileName();
     }
 
@@ -94,8 +88,7 @@ public class FileAuditor implements Comparable
      * qualifiers.
      * @return the name of the class for this file auditor.
      */
-    public String getBaseClassName()
-    {
+    public String getBaseClassName() {
         String result = mAuditEvent.getFileName();
         int i = result.lastIndexOf("/");
         if (i == -1) {
@@ -109,8 +102,7 @@ public class FileAuditor implements Comparable
     }
 
     /** @see java.lang.Comparable#compareTo(java.lang.Object) */
-    public int compareTo(Object aObject)
-    {
+    public int compareTo(final Object aObject) {
         final FileAuditor other = (FileAuditor) aObject;
         return getBaseClassName().compareTo(other.getBaseClassName());
     }

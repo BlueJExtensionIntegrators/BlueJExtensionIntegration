@@ -38,11 +38,9 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
  * @version 1.1
  */
 public abstract class NonlinearFlowCheck
-    extends AbstractCheck
-{
+    extends AbstractCheck {
     /** @see com.puppycrawl.tools.checkstyle.api.AbstractCheck */
-    public int[] getDefaultTokens()
-    {
+    public int[] getDefaultTokens() {
         return new int[] {
             TokenTypes.LITERAL_BREAK,
             TokenTypes.LITERAL_CONTINUE,
@@ -51,8 +49,7 @@ public abstract class NonlinearFlowCheck
     }
 
     /** @see com.puppycrawl.tools.checkstyle.api.AbstractCheck */
-    public void visitToken(DetailAST aAST)
-    {
+    public void visitToken(final DetailAST aAST) {
         log(aAST.getLineNo(),
             aAST.getColumnNo() + aAST.getText().length() - 1,
             "Nonlinear control flow");

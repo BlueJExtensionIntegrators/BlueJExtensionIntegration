@@ -38,39 +38,38 @@ import bluej.extensions.PreferenceGenerator;
  * @author Rick Giles
  * @version $Id: Preferences.java,v 1.5 2007/08/19 03:13:52 stedwar2 Exp $
  */
-public class Preferences implements PreferenceGenerator
-{
-    /** configuration file name when Preferences opens */
+public class Preferences implements PreferenceGenerator {
+    /** configuration file name when Preferences opens. */
     private String mBeforeConfigFileName;
 
-    /** properties file name when Preferences opens */
+    /** properties file name when Preferences opens. */
     private String mBeforePropsFileName;
 
-    /** extension panel */
+    /** extension panel. */
     private JPanel mPanel;
 
-    /** contains name of Checkstyle configuration file */
+    /** contains name of Checkstyle configuration file. */
     private JTextField mConfigFileTextField;
 
-    /** selection of configuration file */
+    /** selection of configuration file. */
     private JButton mConfigFileButton;
 
-    /** contains name of Checkstyle properties file */
+    /** contains name of Checkstyle properties file. */
     private JTextField mPropsFileTextField;
 
-    /** selection of properties file */
+    /** selection of properties file. */
     private JButton mPropsFileButton;
 
-    /** number of panel grid rows */
+    /** number of panel grid rows. */
     private static final int ROWS = 2;
 
-    /** width of text fields */
+    /** width of text fields. */
     private static final int FIELD_WIDTH = 40;
 
-    /** extension key for configuration file property */
+    /** extension key for configuration file property. */
     public static final String CONFIG_FILE_KEY = "checkstyle.ConfigFile";
 
-    /** extension key for properties file property */
+    /** extension key for properties file property. */
     public static final String PROPS_FILE_KEY = "checkstyle.PropsFile";
 
     /**
@@ -78,11 +77,9 @@ public class Preferences implements PreferenceGenerator
      * @author Rick Giles
      * @version 13-May-2003
      */
-    private class ButtonListener implements ActionListener
-    {
+    private class ButtonListener implements ActionListener {
         /** @see java.awt.event.ActionListener */
-        public void actionPerformed(ActionEvent aEvent)
-        {
+        public void actionPerformed(final ActionEvent aEvent) {
             final JFileChooser chooser = new JFileChooser();
             if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
                 return;
@@ -91,8 +88,7 @@ public class Preferences implements PreferenceGenerator
             final String fileName = selectedFile.toString();
             if (aEvent.getSource() == mConfigFileButton) {
                 mConfigFileTextField.setText(fileName);
-            }
-            else {
+            } else {
                 mPropsFileTextField.setText(fileName);
             }
         }
@@ -105,8 +101,7 @@ public class Preferences implements PreferenceGenerator
      * Panel allows user to select a Checkstyle configuration and
      * properties files.
      */
-    public Preferences()
-    {
+    public Preferences() {
         mPanel = new JPanel();
         //mPanel.setLayout(new GridLayout(ROWS, COLS));
 
@@ -139,8 +134,7 @@ public class Preferences implements PreferenceGenerator
     }
 
     /** @see bluej.extensions.PreferenceGenerator#saveValues() */
-    public void saveValues()
-    {
+    public void saveValues() {
         // save the preference values in the BlueJ properties file
         final BlueJManager manager =
             BlueJManager.getInstance();
@@ -151,15 +145,13 @@ public class Preferences implements PreferenceGenerator
 
         // changes?
         if (!(mBeforeConfigFileName.equals(afterConfigFileName))
-            || !(mBeforePropsFileName.equals(afterPropsFileName)))
-        {
+            || !(mBeforePropsFileName.equals(afterPropsFileName))) {
             CheckstyleExtension.getInstance().refreshView();
         }
     }
 
     /** @see bluej.extensions.PreferenceGenerator#loadValues() */
-    public void loadValues()
-    {
+    public void loadValues() {
         final BlueJManager manager =
             BlueJManager.getInstance();
 
@@ -169,9 +161,9 @@ public class Preferences implements PreferenceGenerator
         mPropsFileTextField.setText(mBeforePropsFileName);
     }
 
-    /** @see bluej.extensions.PreferenceGenerator#getPanel() */
-    public JPanel getPanel()
-    {
+    /** @see bluej.extensions.PreferenceGenerator#getPanel()
+     */
+    public JPanel getPanel() {
         return mPanel;
     }
 }

@@ -44,31 +44,31 @@ import com.puppycrawl.tools.checkstyle.api.AuditEvent;
  * @author Rick Giles
  * @version $Id: AuditFrame.java,v 1.7 2007/08/19 03:13:52 stedwar2 Exp $
  */
-public class AuditFrame extends JFrame
-{
-    /** Line column width */
+public class AuditFrame extends JFrame {
+
+    /** Line column width. */
     private static final int LINE_WIDTH = 50;
 
-    /** Column column width */
+    /** Column column width. */
     private static final int COL_WIDTH = 50;
 
-    /** Error column width */
+    /** Error column width. */
     private static final int ERROR_WIDTH = 300;
 
-    /** table height */
+    /** table height. */
     private static final int TABLE_HEIGHT = 300;
 
-    /** model for view of file audit events */
+    /** model for view of file audit events. */
     private final ErrorTableModel mModel = new ErrorTableModel();
 
-    /** view for audited files */
+    /** view for audited files. */
     private final JList mFileList = new JList();
 
-    /** default file list rendered when no files in list */
+    /** default file list rendered when no files in list. */
     private final DefaultListCellRenderer mDefaultListCellRenderer =
         new DefaultListCellRenderer();
 
-    /** file list renderer when files present */
+    /** file list renderer when files present. */
     private final FileCellRenderer mFileCellRenderer =
         new FileCellRenderer();
 
@@ -77,11 +77,9 @@ public class AuditFrame extends JFrame
      * @author Rick Giles
      * @version 14-May-2003
      */
-    private class ListListener implements ListSelectionListener
-    {
+    private class ListListener implements ListSelectionListener {
         /** @see javax.swing.event.ListSelectionListener */
-        public void valueChanged(ListSelectionEvent aEvent)
-        {
+        public void valueChanged(final ListSelectionEvent aEvent) {
             if (aEvent.getValueIsAdjusting()) {
                 return;
             }
@@ -106,45 +104,41 @@ public class AuditFrame extends JFrame
      * @author Rick Giles
      * @version 24-May-2003
      */
-    private class FileCellRenderer extends JLabel implements ListCellRenderer
-    {
-        /** Constructs a <code>FileCellRenderer</code>*/
-         public FileCellRenderer()
-         {
+    private class FileCellRenderer extends JLabel implements ListCellRenderer {
+        /** Constructs a <code>FileCellRenderer</code> .*/
+         FileCellRenderer() {
              setOpaque(true);
          }
 
          /** @see javax.swing.ListCellRenderer#getListCellRendererComponent */
          public Component getListCellRendererComponent(
-             JList aList,
-             Object aValue,
-             int aIndex,
-             boolean aIsSelected,
-             boolean aCellHasFocus)
-         {
+             final JList aList,
+             final Object aValue,
+             final int aIndex,
+             final boolean aIsSelected,
+             final boolean aCellHasFocus) {
+
              final FileAuditor auditor = (FileAuditor) aValue;
 
-             // text label
+             // text label.
              String text = auditor.getBaseClassName();
              if (auditor.getEvents().size() > 0) {
                  text += "*";
              }
              setText(text);
 
-             // default foreground
+             // default foreground.
              setForeground(aList.getForeground());
 
              // if cell is selected, set background color to default cell
              // selection background color
+             // otherwise, set cell background color to our custom color
             if (aIsSelected) {
               setBackground(aList.getSelectionBackground());
-            }
-            // otherwise, set cell background color to our custom color
-            else {
+            } else {
                 if (auditor.getEvents().size() == 0) {
                     setBackground(Color.WHITE);
-                }
-                else {
+                } else {
                     setBackground(Color.YELLOW);
                 }
              }
@@ -156,11 +150,10 @@ public class AuditFrame extends JFrame
      * Constructs an audit frame with components to list files and
      * audit events for each file.
      */
-    public AuditFrame()
-    {
+    public AuditFrame() {
         setTitle("Checkstyle");
 
-        // file list
+        // file list.
         final JScrollPane listScrollPane = new JScrollPane(mFileList);
         mFileList.addListSelectionListener(new ListListener());
         mFileList.setCellRenderer(new FileCellRenderer());
@@ -185,16 +178,14 @@ public class AuditFrame extends JFrame
      * Sets the auditor for this view.
      * @param aAuditor auditor for this view.
      */
-    public synchronized void setAuditor(Auditor aAuditor)
-    {
+    public synchronized void setAuditor(final Auditor aAuditor) {
         boolean useSelection = false;
 
         final Object[] auditors = aAuditor.getFileAuditors().toArray();
         if (auditors.length == 0) {
             mFileList.setCellRenderer(mDefaultListCellRenderer);
             mFileList.setListData(new String[] {"(No files)"});
-        }
-        else {
+        } else {
             final Object oldSelection = mFileList.getSelectedValue();
             mFileList.setCellRenderer(mFileCellRenderer);
             Arrays.sort(auditors);

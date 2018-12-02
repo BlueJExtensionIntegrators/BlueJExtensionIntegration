@@ -29,50 +29,35 @@ import bluej.extensions.BlueJ;
  * extension proxy object to access BlueJ's property settings for that
  * extension.
  * @author Stephen Edwards
- * @version $Id: BlueJPropertiesAdapter.java,v 1.1 2007/08/19 03:13:03 stedwar2 Exp $
+ * @version $Id: BlueJPropertiesAdapter.java,
+ * v 1.1 2007/08/19 03:13:03 stedwar2 Exp $.
  */
-public class BlueJPropertiesAdapter
-    extends Properties
-{
-    //~ Instance variables ....................................................
-
+public class BlueJPropertiesAdapter extends Properties {
     private BlueJ bluej;
 
-
-    //~ Constructors ..........................................................
-
-    // ----------------------------------------------------------
     /**
      * Constructs an adapter that reads properties from the given BlueJ
      * object.
-     * @param bluej The BlueJ proxy object to use to store and retrieve
+     * @param blueJ The BlueJ proxy object to use to store and retrieve
      * property settings.  If this is null, then properties will instead
      * be stored locally.
      */
-    public BlueJPropertiesAdapter(BlueJ bluej)
-    {
-        this(bluej, null);
+    public BlueJPropertiesAdapter(final BlueJ blueJ) {
+        this(blueJ, null);
     }
 
-
-    // ----------------------------------------------------------
     /**
      * Constructs a <code>BlueJChecker</code>.
-     * @param bluej The BlueJ proxy object to use to store and retrieve
+     * @param blueJ The BlueJ proxy object to use to store and retrieve
      * property settings.  If this is null, then properties will instead
      * be stored locally.
      * @param parent The Properties settings to inherit from
      */
-    public BlueJPropertiesAdapter(BlueJ bluej, Properties parent)
-    {
+    public BlueJPropertiesAdapter(final BlueJ blueJ, final Properties parent) {
         super(parent);
-        this.bluej = bluej;
+        bluej = blueJ;
     }
 
-
-    //~ Methods ...............................................................
-
-    // ----------------------------------------------------------
     /**
      * Look up a property value.  First, look in this object itself.
      * If the key is not found in this property list, then check this BlueJ
@@ -87,29 +72,24 @@ public class BlueJPropertiesAdapter
      * @return  the value associated with the key.
      */
     @Override
-    public String getProperty(String key)
-    {
+    public String getProperty(final String key) {
         // Note that we only have to override this version, not the
         // 2-argument version, since the parent class implements the
         // 2-argment getProperty() in terms of the 1-argument getProperty().
 
         // First, look on this object
         Object localVal = get(key);
-        if (localVal != null)
-        {
+        if (localVal != null) {
             return localVal.toString();
         }
 
         // If not found, next look in BlueJ's settings
-        if (bluej != null)
-        {
+        if (bluej != null) {
             String result = bluej.getExtensionPropertyString(key, null);
-            if (result == null)
-            {
+            if (result == null) {
                 result = bluej.getBlueJPropertyString(key, null);
             }
-            if (result != null)
-            {
+            if (result != null) {
                 return result;
             }
         }
@@ -118,8 +98,6 @@ public class BlueJPropertiesAdapter
         return super.getProperty(key);
     }
 
-
-    // ----------------------------------------------------------
     /**
      * Stores the given property to BlueJ's settings for this extension,
      * if we have a live Bluej proxy to use.  Otherwise, fall back to
@@ -130,41 +108,33 @@ public class BlueJPropertiesAdapter
      *          <code>null</code> if it did not have one.
      */
     @Override
-    public synchronized Object setProperty( String key, String value )
-    {
-        if (bluej == null)
-        {
+    public synchronized Object setProperty(final String key,
+                                            final String value) {
+        if (bluej == null) {
             return super.setProperty(key, value);
         }
 
         Object localOld = get(key);
-        if (localOld != null)
-        {
+        if (localOld != null) {
             remove(key);
         }
         bluej.setExtensionPropertyString(key, value);
         return localOld;
     }
 
-
-    // ----------------------------------------------------------
     /**
      * Get the BlueJ proxy object used to look up property values.
      * @return the proxy
      */
-    public BlueJ getBlueJ()
-    {
+    public BlueJ getBlueJ() {
         return bluej;
     }
 
-
-    // ----------------------------------------------------------
     /**
      * Set the BlueJ proxy object used to look up property values.
-     * @param bluej the new proxy to use
+     * @param blueJ the new proxy to use
      */
-    public void setBlueJ(BlueJ bluej)
-    {
-        this.bluej = bluej;
+    public void setBlueJ(final BlueJ blueJ) {
+        this.bluej = blueJ;
     }
 }
